@@ -34,3 +34,7 @@ keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer
 -- bufferline
 keymap.set("n", "<Tab>", ":BufferLineCycleNext<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<leader>x", ":BufDel<CR>", { desc = "Close Current Tab" })
+
+-- Fterm
+keymap.set("n", "<leader>q", "<cmd>lua require'FTerm'.toggle()<cr>", { desc = "Open floating term"})
+
