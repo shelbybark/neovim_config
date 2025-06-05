@@ -38,3 +38,11 @@ keymap.set("n", "<leader>x", ":BufDel<CR>", { desc = "Close Current Tab" })
 -- Fterm
 keymap.set("n", "<leader>q", "<cmd>lua require'FTerm'.toggle()<cr>", { desc = "Open floating term"})
 
+-- Comment
+keymap.set("n", "<leader>/", function() require("Comment.api").toggle.linewise.current() end, { desc = "Toggle comment"})
+keymap.set("v", "<leader>/", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", { desc = "Toggle comment"})
+
+-- Indents for visual selection
+keymap.set("v", ">", ">gv", { desc = "Indent Visual Selection"})
+keymap.set("v", "<", "<gv", { desc = "Indent Visual Selection"})
+
