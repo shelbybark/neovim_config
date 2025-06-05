@@ -4,6 +4,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
   },
+  cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
   config = function()
     -- import mason
     local mason = require("mason")
@@ -37,6 +38,7 @@ return {
         "emmet_ls",
         "prismals",
         "pyright",
+        "django-template-lsp",
       },
     })
 

@@ -33,6 +33,7 @@ keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer
 
 -- bufferline
 keymap.set("n", "<Tab>", ":BufferLineCycleNext<CR>", { desc = "Go to next tab" })
+keymap.set("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", { desc = "Go to previous tab" })
 keymap.set("n", "<leader>x", ":BufDel<CR>", { desc = "Close Current Tab" })
 
 -- Fterm
