@@ -53,6 +53,7 @@ return {
     lualine.setup({
       options = {
         theme = my_lualine_theme,
+        disabled_filetypes = { 'NvimTree' },
       },
       sections = {
         lualine_x = {
