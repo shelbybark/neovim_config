@@ -1,4 +1,23 @@
 return {
+  -- {
+  --   "navarasu/onedark.nvim",
+  --   priority = 1000, -- make sure to load this before all the other start plugins
+  --   config = function()
+  --     require('onedark').setup {
+  --       style = 'deep',
+  --       -- Custom Highlights --
+  --       colors = {
+  --         line_bg = "#495060",    -- define a new color
+  --         line_fg = "#838DA0",    -- define a new color
+  --       }, -- Override default colors
+  --       highlights = {
+  --         ["LineNr"] = {fg = '$line_fg', bg = '$line_bg', fmt = 'none'},
+  --       }, -- Override highlight groups
+  --     }
+  --     -- Enable theme
+  --     require('onedark').load()
+  --   end
+  -- }
   {
     "folke/tokyonight.nvim",
     priority = 1000, -- make sure to load this before all the other start plugins
