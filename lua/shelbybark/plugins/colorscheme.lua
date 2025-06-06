@@ -4,38 +4,18 @@ return {
     name = "catppuccin",
     priority = 1000,
     config = function()
-      require('catppuccin').setup {
+      require('catppuccin').setup ({
         flavour = "mocha", -- latte, frappe, macchiato, mocha
         custom_highlights = function(colors)
-            return {
-                LineNr = { fg = '#838DA0', bg = '#495060', },
-            }
-        end
-      }
+          return {
+            LineNr = { fg = '#838DA0', bg = '#495060' }
+          }
+        end,
+      })
       -- load the colorscheme here
-      -- vim.cmd([[colorscheme catppuccin]])
-      require('catppuccin').load()
-    end
-  }
-  -- {
-  --   "navarasu/onedark.nvim",
-  --   priority = 1000, -- make sure to load this before all the other start plugins
-  --   config = function()
-  --     require('onedark').setup {
-  --       style = 'deep',
-  --       -- Custom Highlights --
-  --       colors = {
-  --         line_bg = "#495060",    -- define a new color
-  --         line_fg = "#838DA0",    -- define a new color
-  --       }, -- Override default colors
-  --       highlights = {
-  --         ["LineNr"] = {fg = '$line_fg', bg = '$line_bg', fmt = 'none'},
-  --       }, -- Override highlight groups
-  --     }
-  --     -- Enable theme
-  --     require('onedark').load()
-  --   end
-  -- }
+      vim.cmd([[colorscheme catppuccin]])
+    end,
+  },
   -- {
   --   "folke/tokyonight.nvim",
   --   priority = 1000, -- make sure to load this before all the other start plugins
@@ -76,4 +56,23 @@ return {
   --     vim.cmd([[colorscheme tokyonight]])
   --   end,
   -- },
+  -- {
+  --   "navarasu/onedark.nvim",
+  --   priority = 1000, -- make sure to load this before all the other start plugins
+  --   config = function()
+  --     require('onedark').setup {
+  --       style = 'deep',
+  --       -- Custom Highlights --
+  --       colors = {
+  --         line_bg = "#495060",    -- define a new color
+  --         line_fg = "#838DA0",    -- define a new color
+  --       }, -- Override default colors
+  --       highlights = {
+  --         ["LineNr"] = {fg = '$line_fg', bg = '$line_bg', fmt = 'none'},
+  --       }, -- Override highlight groups
+  --     }
+  --     -- Enable theme
+  --     require('onedark').load()
+  --   end
+  -- }
 }
