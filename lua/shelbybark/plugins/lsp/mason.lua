@@ -49,6 +49,7 @@ return {
 				"pylint", -- python linter
 				"eslint_d", -- js linter
 				"django-template-lsp",
+				"djlint",
 			},
 		})
 	end,
