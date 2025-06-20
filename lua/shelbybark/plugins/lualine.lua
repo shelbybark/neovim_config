@@ -54,6 +54,8 @@ return {
 			options = {
 				theme = my_lualine_theme,
 				disabled_filetypes = { "NvimTree", "Avante" },
+				component_separators = "",
+				section_separators = "",
 			},
 			sections = {
 				lualine_x = {
