@@ -49,7 +49,8 @@ return {
 				"pylint", -- python linter
 				"eslint_d", -- js linter
 				"django-template-lsp",
-				"htmlbeautifier",
+				-- "htmlbeautifier",
+				"superhtml",
 				"djlint",
 			},
 		})
