@@ -73,6 +73,7 @@ return {
 
 		-- used to enable autocompletion (assign to every lsp server config)
 		local capabilities = cmp_nvim_lsp.default_capabilities()
+		capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 		-- Change the Diagnostic symbols in the sign column (gutter)
 		-- (not in youtube nvim video)
@@ -82,8 +83,9 @@ return {
 			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 		end
 
-		vim.lsp.config.emmet_ls = {
-			on_attach = on_attach,
+		lspconfig.emmet_ls.setup({
+			-- vim.lsp.config.emmet_ls = {
+			-- on_attach = on_attach,
 			capabilities = capabilities,
 			filetypes = {
 				"html",
@@ -97,7 +99,7 @@ return {
 				"svelte",
 				"php",
 			},
-		}
+		})
 	end,
 }
 -- return {
