@@ -4,7 +4,7 @@ vim.cmd("let g:netrw_liststyle = 3")
 local opt = vim.opt -- for conciseness
 
 -- turn off clip board
-opt.clipboard = ''
+opt.clipboard = ""
 
 -- line numbers
 opt.relativenumber = false -- show relative line numbers

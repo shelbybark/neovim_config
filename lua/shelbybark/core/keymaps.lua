@@ -31,19 +31,31 @@ keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  
 keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab
 
+-- no neck pain (simple narrow view)
+-- keymap.set("n", "<leader>nn", ":NoNeckPain<CR>", { desc = "View with wide margin" })
+
+-- wrap mode
+keymap.set("n", "<leader>w", ":ToggleWrapMode<CR>", { desc = "Toggle wrap mode" })
+
 -- bufferline
 keymap.set("n", "<Tab>", ":BufferLineCycleNext<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", { desc = "Go to previous tab" })
 keymap.set("n", "<leader>x", ":BufDel<CR>", { desc = "Close Current Tab" })
 
 -- Fterm
-keymap.set("n", "<leader>q", "<cmd>lua require'FTerm'.toggle()<cr>", { desc = "Open floating term"})
+keymap.set("n", "<leader>q", "<cmd>lua require'FTerm'.toggle()<cr>", { desc = "Open floating term" })
 
 -- Comment
-keymap.set("n", "<leader>/", function() require("Comment.api").toggle.linewise.current() end, { desc = "Toggle comment"})
-keymap.set("v", "<leader>/", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", { desc = "Toggle comment"})
+keymap.set("n", "<leader>/", function()
+	require("Comment.api").toggle.linewise.current()
+end, { desc = "Toggle comment" })
+keymap.set(
+	"v",
+	"<leader>/",
+	"<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
+	{ desc = "Toggle comment" }
+)
 
 -- Indents for visual selection
-keymap.set("v", ">", ">gv", { desc = "Indent Visual Selection"})
-keymap.set("v", "<", "<gv", { desc = "Indent Visual Selection"})
-
+keymap.set("v", ">", ">gv", { desc = "Indent Visual Selection" })
+keymap.set("v", "<", "<gv", { desc = "Indent Visual Selection" })
