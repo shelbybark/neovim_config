@@ -3,6 +3,22 @@ vim.g.mapleader = " "
 
 local keymap = vim.keymap -- for conciseness
 
+vim.api.nvim_create_autocmd("User", {
+	pattern = "VeryLazy",
+	callback = function()
+		local map = vim.keymap.set
+		local o = { noremap = true, silent = true }
+		map("n", "<C-h>", "<C-w>h", o)
+		map("n", "<C-j>", "<C-w>j", o)
+		map("n", "<C-k>", "<C-w>k", o)
+		map("n", "<C-l>", "<C-w>l", o)
+		map("t", "<C-h>", [[<C-\><C-n><C-w>h]], o)
+		map("t", "<C-j>", [[<C-\><C-n><C-w>j]], o)
+		map("t", "<C-k>", [[<C-\><C-n><C-w>k]], o)
+		map("t", "<C-l>", [[<C-\><C-n><C-w>l]], o)
+	end,
+})
+
 ---------------------
 -- General Keymaps -------------------
 
