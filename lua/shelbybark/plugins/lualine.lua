@@ -5,6 +5,21 @@ return {
 		local lualine = require("lualine")
 		local lazy_status = require("lazy.status") -- to configure lazy pending updates count
 
+		-- CodeCompanion status function
+		local function codecompanion_status()
+			local ok, codecompanion = pcall(require, "codecompanion")
+			if not ok then
+				return ""
+			end
+
+			local status = codecompanion.status()
+			if status and status ~= "" then
+				return "🤖 " .. status
+			else
+				return ""
+			end
+		end
+
 		local colors = {
 			blue = "#65D1FF",
 			green = "#3EFFDC",
@@ -14,6 +29,7 @@ return {
 			fg = "#c3ccdc",
 			bg = "#112638",
 			inactive_bg = "#2c3043",
+			semilightgray = "#6b7280",
 		}
 
 		local my_lualine_theme = {
@@ -59,6 +75,10 @@ return {
 			},
 			sections = {
 				lualine_x = {
+					{
+						codecompanion_status,
+						color = { fg = colors.green },
+					},
 					{
 						lazy_status.updates,
 						cond = lazy_status.has_updates,
