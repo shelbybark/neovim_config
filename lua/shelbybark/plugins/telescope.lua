@@ -1,6 +1,5 @@
 return {
   "nvim-telescope/telescope.nvim",
-  branch = "0.1.x",
   dependencies = {
     "nvim-lua/plenary.nvim",
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -15,6 +14,21 @@ return {
     telescope.setup({
       defaults = {
         path_display = { "smart" },
+        -- Add fallback for treesitter highlighting issues
+        buffer_previewer_maker = function(filepath, bufnr, opts)
+          opts = opts or {}
+          
+          -- Try default previewer, fallback if treesitter fails
+          local ok, _ = pcall(function()
+            require("telescope.previewers").buffer_previewer_maker(filepath, bufnr, opts)
+          end)
+          
+          if not ok then
+            -- Fallback without treesitter highlighting
+            opts.use_highlighter = false
+            require("telescope.previewers").buffer_previewer_maker(filepath, bufnr, opts)
+          end
+        end,
         mappings = {
           i = {
             ["<C-k>"] = actions.move_selection_previous, -- move to prev result

@@ -43,11 +43,21 @@ return {
 				"yaml",
 				"ruby",
 			},
+			-- Add standard treesitter configuration
+			highlight = {
+				enable = true,
+				additional_vim_regex_highlighting = false,
+			},
+			indent = {
+				enable = true,
+			},
 		},
 		config = function(_, opts)
-			-- install parsers from custom opts.ensure_installed
+			-- Set up standard treesitter (this handles ensure_installed automatically)
+			require("nvim-treesitter.configs").setup(opts)
+
+			-- Register parsers for filetypes (if needed for custom mappings)
 			if opts.ensure_installed and #opts.ensure_installed > 0 then
-				require("nvim-treesitter").install(opts.ensure_installed)
 				-- register and start parsers for filetypes
 				for _, parser in ipairs(opts.ensure_installed) do
 					local filetypes = parser -- In this case, parser is the filetype/language name
@@ -56,7 +66,10 @@ return {
 					vim.api.nvim_create_autocmd({ "FileType" }, {
 						pattern = filetypes,
 						callback = function(event)
-							vim.treesitter.start(event.buf, parser)
+							local ok, _ = pcall(vim.treesitter.start, event.buf, parser)
+							if not ok then
+								-- Silently fail if parser issues
+							end
 						end,
 					})
 				end
@@ -87,25 +100,30 @@ return {
 						return
 					end
 					-- Try to get existing parser (helpful check if filetype was returned above)
-					local parser_configs = require("nvim-treesitter.parsers")
-					if not parser_configs[parser_name] then
-						return -- Parser not available, skip silently
+				local parser_configs = require("nvim-treesitter.parsers")
+				if not parser_configs[parser_name] then
+					return -- Parser not available, skip silently
+				end
+
+				local parser_installed = pcall(vim.treesitter.get_parser, bufnr, parser_name)
+
+				if not parser_installed then
+					-- If not installed, install parser synchronously
+					local ok, _ = pcall(function()
+						require("nvim-treesitter.install").install(parser_name)
+					end)
+					if not ok then
+						return
 					end
+				end
 
-					local parser_installed = pcall(vim.treesitter.get_parser, bufnr, parser_name)
+				-- let's check again
+				parser_installed = pcall(vim.treesitter.get_parser, bufnr, parser_name)
 
-					if not parser_installed then
-						-- If not installed, install parser synchronously
-						require("nvim-treesitter").install({ parser_name }):wait(30000)
-					end
-
-					-- let's check again
-					parser_installed = pcall(vim.treesitter.get_parser, bufnr, parser_name)
-
-					if parser_installed then
-						-- Start treesitter for this buffer
-						vim.treesitter.start(bufnr, parser_name)
-					end
+				if parser_installed then
+					-- Start treesitter for this buffer
+					pcall(vim.treesitter.start, bufnr, parser_name)
+				end
 				end,
 			})
 		end,
@@ -115,7 +133,6 @@ return {
 		event = "BufRead",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
-			event = "BufRead",
 		},
 		opts = {
 			multiwindow = true,
@@ -124,6 +141,7 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		branch = "main",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		keys = {
 			{
 				"af",
