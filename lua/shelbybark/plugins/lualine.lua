@@ -5,19 +5,87 @@ return {
 		local lualine = require("lualine")
 		local lazy_status = require("lazy.status") -- to configure lazy pending updates count
 
-		-- CodeCompanion status function
+		-- Toggle for shortened mode names
+		vim.g.lualine_use_short_modes = vim.g.lualine_use_short_modes or true
+
+		-- Short mode names (single letters)
+		local short_mode_map = {
+			['n'] = 'N',
+			['no'] = 'N',
+			['nov'] = 'N',
+			['noV'] = 'N',
+			['niI'] = 'N',
+			['niR'] = 'N',
+			['niV'] = 'N',
+			['i'] = 'I',
+			['ic'] = 'I',
+			['ix'] = 'I',
+			['v'] = 'V',
+			['V'] = 'VL',
+			[''] = 'VB',
+			['s'] = 'S',
+			['S'] = 'SL',
+			[''] = 'SB',
+			['r'] = 'R',
+			['rm'] = 'R',
+			['r?'] = 'R',
+			['R'] = 'R',
+			['Rv'] = 'R',
+			['c'] = 'C',
+			['cv'] = 'C',
+			['ce'] = 'C',
+			['t'] = 'T',
+		}
+
+		-- Full mode names
+		local full_mode_map = {
+			['n'] = 'NORMAL',
+			['no'] = 'NORMAL',
+			['nov'] = 'NORMAL',
+			['noV'] = 'NORMAL',
+			['niI'] = 'NORMAL',
+			['niR'] = 'NORMAL',
+			['niV'] = 'NORMAL',
+			['i'] = 'INSERT',
+			['ic'] = 'INSERT',
+			['ix'] = 'INSERT',
+			['v'] = 'VISUAL',
+			['V'] = 'V-LINE',
+			[''] = 'V-BLOCK',
+			['s'] = 'SELECT',
+			['S'] = 'S-LINE',
+			[''] = 'S-BLOCK',
+			['r'] = 'REPLACE',
+			['rm'] = 'REPLACE',
+			['r?'] = 'REPLACE',
+			['R'] = 'REPLACE',
+			['Rv'] = 'REPLACE',
+			['c'] = 'COMMAND',
+			['cv'] = 'COMMAND',
+			['ce'] = 'COMMAND',
+			['t'] = 'TERMINAL',
+		}
+
+		-- Better CodeCompanion status function
 		local function codecompanion_status()
 			local ok, codecompanion = pcall(require, "codecompanion")
 			if not ok then
 				return ""
 			end
 
+			-- Check for active chats or requests
 			local status = codecompanion.status()
 			if status and status ~= "" then
-				return "🤖 " .. status
-			else
-				return ""
+				return "🤖"
 			end
+			
+			-- Also check if there are any active chat buffers
+			local chat_ok, chat = pcall(codecompanion.buf_get_chat)
+			if chat_ok and chat then
+				return "💬"
+			end
+
+			return ""
 		end
 
 		local colors = {
@@ -74,6 +142,18 @@ return {
 				section_separators = "",
 			},
 			sections = {
+				lualine_a = {
+					{
+						function()
+							local mode = vim.fn.mode()
+							if vim.g.lualine_use_short_modes then
+								return short_mode_map[mode] or mode
+							else
+								return full_mode_map[mode] or mode
+							end
+						end,
+					},
+				},
 				lualine_x = {
 					{
 						codecompanion_status,
@@ -84,11 +164,19 @@ return {
 						cond = lazy_status.has_updates,
 						color = { fg = "#ff9e64" },
 					},
-					{ "encoding" },
-					{ "fileformat" },
 					{ "filetype" },
 				},
 			},
+		})
+
+		-- Create command to toggle short modes
+		vim.api.nvim_create_user_command('ToggleLualineShortModes', function()
+			vim.g.lualine_use_short_modes = not vim.g.lualine_use_short_modes
+			require('lualine').refresh()
+			local status = vim.g.lualine_use_short_modes and 'short (single letter)' or 'full words'
+			vim.notify('Lualine modes set to ' .. status, vim.log.levels.INFO)
+		end, {
+			desc = 'Toggle between short and full mode names in lualine'
 		})
 	end,
 }

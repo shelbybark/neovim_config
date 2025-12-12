@@ -50,13 +50,18 @@ return {
 		})
 
 		-----------------------------------------------------------------------
-		-- 2) Diagnostics signs (same icons you had; adjust if you used others)
+		-- 2) Diagnostics signs (modern approach)
 		-----------------------------------------------------------------------
-		local signs = { Error = "", Warn = "", Hint = "󰌵", Info = "" }
-		for type, icon in pairs(signs) do
-			local hl = "DiagnosticSign" .. type
-			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-		end
+		vim.diagnostic.config({
+			signs = {
+				text = {
+					[vim.diagnostic.severity.ERROR] = "",
+					[vim.diagnostic.severity.WARN] = "",
+					[vim.diagnostic.severity.HINT] = "󰌵",
+					[vim.diagnostic.severity.INFO] = "",
+				},
+			},
+		})
 
 		-----------------------------------------------------------------------
 		-- 3) Capabilities (nvim-cmp) applied to *all* servers
