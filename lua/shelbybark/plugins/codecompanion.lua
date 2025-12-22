@@ -36,6 +36,18 @@ return {
 							},
 						})
 					end,
+					anthropic_opus = function()
+						return require("codecompanion.adapters").extend("anthropic", {
+							env = {
+								api_key = "ANTHROPIC_API_KEY",
+							},
+							schema = {
+								model = {
+									default = "claude-opus-4-5-20251101",
+								},
+							},
+						})
+					end,
 				},
 			},
 			-- Display settings for the chat window
@@ -71,6 +83,18 @@ return {
 		vim.api.nvim_set_keymap("n", "<leader>ca", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
 		vim.api.nvim_set_keymap("v", "<leader>ca", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
 
-
+		-- Additional keymaps for Opus
+		vim.api.nvim_set_keymap(
+			"n",
+			"<leader>co",
+			"<cmd>CodeCompanionChat anthropic_opus Toggle<cr>",
+			{ noremap = true, silent = true, desc = "Chat with Claude Opus" }
+		)
+		vim.api.nvim_set_keymap(
+			"v",
+			"<leader>co",
+			"<cmd>CodeCompanionChat anthropic_opus Toggle<cr>",
+			{ noremap = true, silent = true, desc = "Chat with Claude Opus" }
+		)
 	end,
 }
