@@ -9,10 +9,6 @@ return {
 		"j-hui/fidget.nvim",
 		-- For statusline integration
 		-- "nvim-lualine/lualine.nvim",
-		{
-			"franco-ruggeri/codecompanion-lualine.nvim", -- Add this line
-			dependencies = { "olimorris/codecompanion.nvim" },
-		},
 	},
 	event = "VeryLazy", -- Lazy load the plugin
 	config = function()
@@ -52,6 +48,18 @@ return {
 							},
 						})
 					end,
+					anthropic_haiku = function()
+						return require("codecompanion.adapters").extend("anthropic", {
+							env = {
+								api_key = "ANTHROPIC_API_KEY",
+							},
+							schema = {
+								model = {
+									default = "claude-haiku-4-5-20251001",
+								},
+							},
+						})
+					end,
 				},
 			},
 			-- Display settings for the chat window
@@ -74,15 +82,15 @@ return {
 		-- Optional: Set up keymaps
 		vim.api.nvim_set_keymap(
 			"n",
-			"<leader>cc",
-			"<cmd>CodeCompanionChat Toggle<cr>",
-			{ noremap = true, silent = true }
+		"<leader>cc",
+		"<cmd>CodeCompanionChat anthropic_haiku Toggle<cr>",
+		{ noremap = true, silent = true, desc = "Chat with Claude Haiku" }
 		)
 		vim.api.nvim_set_keymap(
 			"v",
-			"<leader>cc",
-			"<cmd>CodeCompanionChat Toggle<cr>",
-			{ noremap = true, silent = true }
+		"<leader>cc",
+		"<cmd>CodeCompanionChat anthropic_haiku Toggle<cr>",
+		{ noremap = true, silent = true, desc = "Chat with Claude Haiku" }
 		)
 		vim.api.nvim_set_keymap("n", "<leader>ca", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
 		vim.api.nvim_set_keymap("v", "<leader>ca", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
@@ -110,6 +118,8 @@ return {
 				model_info = "Claude Sonnet (claude-sonnet-4-20250514)"
 			elseif current_adapter == "anthropic_opus" then
 				model_info = "Claude Opus (claude-opus-4-5-20251101)"
+			elseif current_adapter == "anthropic_haiku" then
+				model_info = "Claude Haiku (claude-haiku-4-5-20251001)"
 			end
 
 			vim.notify(string.format("Current CodeCompanion model: %s", model_info), vim.log.levels.INFO)
@@ -120,18 +130,19 @@ return {
 		vim.api.nvim_create_user_command("CodeCompanionSwitchModel", function(args)
 			local model = args.args
 			if model == "" then
-				vim.notify("Available models: sonnet, opus", vim.log.levels.INFO)
+				vim.notify("Available models: sonnet, opus, haiku", vim.log.levels.INFO)
 				return
 			end
 
 			local adapter_map = {
 				sonnet = "anthropic",
 				opus = "anthropic_opus",
+				haiku = "anthropic_haiku",
 			}
 
 			local adapter = adapter_map[model:lower()]
 			if not adapter then
-				vim.notify("Invalid model. Use: sonnet, opus", vim.log.levels.ERROR)
+				vim.notify("Invalid model. Use: sonnet, opus, haiku", vim.log.levels.ERROR)
 				return
 			end
 
@@ -146,10 +157,24 @@ return {
 		end, {
 			nargs = 1,
 			complete = function()
-				return { "sonnet", "opus" }
+				return { "sonnet", "opus", "haiku" }
 			end,
-			desc = "Switch CodeCompanion model (sonnet/opus)",
+			desc = "Switch CodeCompanion model (sonnet/opus/haiku)",
 		})
+
+		-- Additional keymaps for Sonnet (backup primary)
+		vim.api.nvim_set_keymap(
+			"n",
+			"<leader>cs",
+			"<cmd>CodeCompanionChat anthropic Toggle<cr>",
+			{ noremap = true, silent = true, desc = "Chat with Claude Sonnet" }
+		)
+		vim.api.nvim_set_keymap(
+			"v",
+			"<leader>cs",
+			"<cmd>CodeCompanionChat anthropic Toggle<cr>",
+			{ noremap = true, silent = true, desc = "Chat with Claude Sonnet" }
+		)
 
 		-- Additional keymaps for Opus
 		vim.api.nvim_set_keymap(
@@ -163,6 +188,20 @@ return {
 			"<leader>co",
 			"<cmd>CodeCompanionChat anthropic_opus Toggle<cr>",
 			{ noremap = true, silent = true, desc = "Chat with Claude Opus" }
+		)
+
+		-- Additional keymaps for Haiku
+		vim.api.nvim_set_keymap(
+			"n",
+			"<leader>ch",
+			"<cmd>CodeCompanionChat anthropic_haiku Toggle<cr>",
+			{ noremap = true, silent = true, desc = "Chat with Claude Haiku" }
+		)
+		vim.api.nvim_set_keymap(
+			"v",
+			"<leader>ch",
+			"<cmd>CodeCompanionChat anthropic_haiku Toggle<cr>",
+			{ noremap = true, silent = true, desc = "Chat with Claude Haiku" }
 		)
 	end,
 }
