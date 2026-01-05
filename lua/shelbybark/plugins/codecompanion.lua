@@ -8,7 +8,11 @@ return {
 		-- For progress notifications
 		"j-hui/fidget.nvim",
 		-- For statusline integration
-		"nvim-lualine/lualine.nvim",
+		-- "nvim-lualine/lualine.nvim",
+		{
+			"franco-ruggeri/codecompanion-lualine.nvim", -- Add this line
+			dependencies = { "olimorris/codecompanion.nvim" },
+		},
 	},
 	event = "VeryLazy", -- Lazy load the plugin
 	config = function()
@@ -90,7 +94,6 @@ return {
 			{ noremap = true, silent = true, desc = "Show current CodeCompanion model" }
 		)
 
-
 		-- Create commands to show and change current model
 		vim.api.nvim_create_user_command("CodeCompanionModel", function()
 			local ok, codecompanion = pcall(require, "codecompanion")
@@ -98,54 +101,54 @@ return {
 				vim.notify("CodeCompanion not available", vim.log.levels.ERROR)
 				return
 			end
-			
+
 			-- Get current adapter info
 			local current_adapter = codecompanion.config.strategies.chat.adapter
 			local model_info = "Unknown"
-			
+
 			if current_adapter == "anthropic" then
 				model_info = "Claude Sonnet (claude-sonnet-4-20250514)"
 			elseif current_adapter == "anthropic_opus" then
 				model_info = "Claude Opus (claude-opus-4-5-20251101)"
 			end
-			
+
 			vim.notify(string.format("Current CodeCompanion model: %s", model_info), vim.log.levels.INFO)
 		end, {
-			desc = "Show current CodeCompanion model"
+			desc = "Show current CodeCompanion model",
 		})
-		
+
 		vim.api.nvim_create_user_command("CodeCompanionSwitchModel", function(args)
 			local model = args.args
 			if model == "" then
 				vim.notify("Available models: sonnet, opus", vim.log.levels.INFO)
 				return
 			end
-			
+
 			local adapter_map = {
 				sonnet = "anthropic",
-				opus = "anthropic_opus"
+				opus = "anthropic_opus",
 			}
-			
+
 			local adapter = adapter_map[model:lower()]
 			if not adapter then
 				vim.notify("Invalid model. Use: sonnet, opus", vim.log.levels.ERROR)
 				return
 			end
-			
+
 			-- Update the config
 			require("codecompanion").config.strategies.chat.adapter = adapter
 			require("codecompanion").config.strategies.inline.adapter = adapter
-			
+
 			vim.notify(string.format("Switched to %s model", model), vim.log.levels.INFO)
-			
+
 			-- Refresh lualine to update the status
-			pcall(require("lualine").refresh)
+			-- pcall(require("lualine").refresh)
 		end, {
 			nargs = 1,
 			complete = function()
-				return {"sonnet", "opus"}
+				return { "sonnet", "opus" }
 			end,
-			desc = "Switch CodeCompanion model (sonnet/opus)"
+			desc = "Switch CodeCompanion model (sonnet/opus)",
 		})
 
 		-- Additional keymaps for Opus

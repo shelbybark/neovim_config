@@ -10,131 +10,131 @@ return {
 
 		-- Short mode names (single letters)
 		local short_mode_map = {
-			['n'] = 'N',
-			['no'] = 'N',
-			['nov'] = 'N',
-			['noV'] = 'N',
-			['niI'] = 'N',
-			['niR'] = 'N',
-			['niV'] = 'N',
-			['i'] = 'I',
-			['ic'] = 'I',
-			['ix'] = 'I',
-			['v'] = 'V',
-			['V'] = 'VL',
-			[''] = 'VB',
-			['s'] = 'S',
-			['S'] = 'SL',
-			[''] = 'SB',
-			['r'] = 'R',
-			['rm'] = 'R',
-			['r?'] = 'R',
-			['R'] = 'R',
-			['Rv'] = 'R',
-			['c'] = 'C',
-			['cv'] = 'C',
-			['ce'] = 'C',
-			['t'] = 'T',
+			["n"] = "N",
+			["no"] = "N",
+			["nov"] = "N",
+			["noV"] = "N",
+			["niI"] = "N",
+			["niR"] = "N",
+			["niV"] = "N",
+			["i"] = "I",
+			["ic"] = "I",
+			["ix"] = "I",
+			["v"] = "V",
+			["V"] = "VL",
+			[""] = "VB",
+			["s"] = "S",
+			["S"] = "SL",
+			[""] = "SB",
+			["r"] = "R",
+			["rm"] = "R",
+			["r?"] = "R",
+			["R"] = "R",
+			["Rv"] = "R",
+			["c"] = "C",
+			["cv"] = "C",
+			["ce"] = "C",
+			["t"] = "T",
 		}
 
 		-- Full mode names
 		local full_mode_map = {
-			['n'] = 'NORMAL',
-			['no'] = 'NORMAL',
-			['nov'] = 'NORMAL',
-			['noV'] = 'NORMAL',
-			['niI'] = 'NORMAL',
-			['niR'] = 'NORMAL',
-			['niV'] = 'NORMAL',
-			['i'] = 'INSERT',
-			['ic'] = 'INSERT',
-			['ix'] = 'INSERT',
-			['v'] = 'VISUAL',
-			['V'] = 'V-LINE',
-			[''] = 'V-BLOCK',
-			['s'] = 'SELECT',
-			['S'] = 'S-LINE',
-			[''] = 'S-BLOCK',
-			['r'] = 'REPLACE',
-			['rm'] = 'REPLACE',
-			['r?'] = 'REPLACE',
-			['R'] = 'REPLACE',
-			['Rv'] = 'REPLACE',
-			['c'] = 'COMMAND',
-			['cv'] = 'COMMAND',
-			['ce'] = 'COMMAND',
-			['t'] = 'TERMINAL',
+			["n"] = "NORMAL",
+			["no"] = "NORMAL",
+			["nov"] = "NORMAL",
+			["noV"] = "NORMAL",
+			["niI"] = "NORMAL",
+			["niR"] = "NORMAL",
+			["niV"] = "NORMAL",
+			["i"] = "INSERT",
+			["ic"] = "INSERT",
+			["ix"] = "INSERT",
+			["v"] = "VISUAL",
+			["V"] = "V-LINE",
+			[""] = "V-BLOCK",
+			["s"] = "SELECT",
+			["S"] = "S-LINE",
+			[""] = "S-BLOCK",
+			["r"] = "REPLACE",
+			["rm"] = "REPLACE",
+			["r?"] = "REPLACE",
+			["R"] = "REPLACE",
+			["Rv"] = "REPLACE",
+			["c"] = "COMMAND",
+			["cv"] = "COMMAND",
+			["ce"] = "COMMAND",
+			["t"] = "TERMINAL",
 		}
 
 		-- Enhanced CodeCompanion status function with model display
-		local function codecompanion_status()
-			local ok, codecompanion = pcall(require, "codecompanion")
-			if not ok then
-				return ""
-			end
-
-			-- Get current adapter and model info
-			local current_adapter = nil
-			local current_model = nil
-			
-			-- Try to get adapter from active chat buffer
-			local chat_ok, chat = pcall(codecompanion.buf_get_chat)
-			if chat_ok and chat and chat.adapter then
-				current_adapter = chat.adapter.name or chat.adapter
-				current_model = chat.adapter.schema and chat.adapter.schema.model and chat.adapter.schema.model.default
-			end
-			
-			-- If no active chat, get default adapter from config
-			if not current_adapter then
-				local config_ok, config = pcall(function()
-					return codecompanion.config.strategies.chat.adapter
-				end)
-				if config_ok and config then
-					current_adapter = config
-					-- Try to get model from adapter config
-					local adapter_config_ok, adapter_config = pcall(function()
-						return codecompanion.config.adapters.http[config]
-					end)
-					if adapter_config_ok and type(adapter_config) == "function" then
-						local adapter_instance_ok, adapter_instance = pcall(adapter_config)
-						if adapter_instance_ok and adapter_instance.schema and adapter_instance.schema.model then
-							current_model = adapter_instance.schema.model.default
-						end
-					end
-				end
-			end
-			
-			-- Format the display string
-			local status_parts = {}
-			
-			-- Check for active requests/chats first
-			local status = codecompanion.status()
-			if status and status ~= "" then
-				table.insert(status_parts, "🤖")
-			elseif chat_ok and chat then
-				table.insert(status_parts, "💬")
-			end
-			
-			-- Add model info
-			if current_model then
-				-- Shorten model names for better display
-				local short_model = current_model
-					:gsub("claude%-sonnet%-4%-20250514", "Sonnet")
-					:gsub("claude%-opus%-4%-5%-20251101", "Opus")
-					:gsub("claude%-3%-5%-sonnet%-20241022", "3.5S")
-					:gsub("claude%-3%-haiku%-20240307", "Haiku")
-					:gsub("gpt%-4o", "GPT-4o")
-					:gsub("gpt%-4", "GPT-4")
-					:gsub("gpt%-3.5%-turbo", "GPT-3.5")
-				table.insert(status_parts, short_model)
-			elseif current_adapter then
-				-- Show adapter name if model not available
-				local short_adapter = current_adapter:gsub("anthropic", "Claude"):gsub("openai", "OpenAI")
-				table.insert(status_parts, short_adapter)
-			end
-			
-			return table.concat(status_parts, " ")
-		end
+		-- local function codecompanion_status()
+		-- 	local ok, codecompanion = pcall(require, "codecompanion")
+		-- 	if not ok then
+		-- 		return ""
+		-- 	end
+		--
+		-- 	-- Get current adapter and model info
+		-- 	local current_adapter = nil
+		-- 	local current_model = nil
+		--
+		-- 	-- Try to get adapter from active chat buffer
+		-- 	local chat_ok, chat = pcall(codecompanion.buf_get_chat)
+		-- 	if chat_ok and chat and chat.adapter then
+		-- 		current_adapter = chat.adapter.name or chat.adapter
+		-- 		current_model = chat.adapter.schema and chat.adapter.schema.model and chat.adapter.schema.model.default
+		-- 	end
+		--
+		-- 	-- If no active chat, get default adapter from config
+		-- 	if not current_adapter then
+		-- 		local config_ok, config = pcall(function()
+		-- 			return codecompanion.config.strategies.chat.adapter
+		-- 		end)
+		-- 		if config_ok and config then
+		-- 			current_adapter = config
+		-- 			-- Try to get model from adapter config
+		-- 			local adapter_config_ok, adapter_config = pcall(function()
+		-- 				return codecompanion.config.adapters.http[config]
+		-- 			end)
+		-- 			if adapter_config_ok and type(adapter_config) == "function" then
+		-- 				local adapter_instance_ok, adapter_instance = pcall(adapter_config)
+		-- 				if adapter_instance_ok and adapter_instance.schema and adapter_instance.schema.model then
+		-- 					current_model = adapter_instance.schema.model.default
+		-- 				end
+		-- 			end
+		-- 		end
+		-- 	end
+		--
+		-- 	-- Format the display string
+		-- 	local status_parts = {}
+		--
+		-- 	-- Check for active requests/chats first
+		-- 	local status = codecompanion.status()
+		-- 	if status and status ~= "" then
+		-- 		table.insert(status_parts, "🤖")
+		-- 	elseif chat_ok and chat then
+		-- 		table.insert(status_parts, "💬")
+		-- 	end
+		--
+		-- 	-- Add model info
+		-- 	if current_model then
+		-- 		-- Shorten model names for better display
+		-- 		local short_model = current_model
+		-- 			:gsub("claude%-sonnet%-4%-20250514", "Sonnet")
+		-- 			:gsub("claude%-opus%-4%-5%-20251101", "Opus")
+		-- 			:gsub("claude%-3%-5%-sonnet%-20241022", "3.5S")
+		-- 			:gsub("claude%-3%-haiku%-20240307", "Haiku")
+		-- 			:gsub("gpt%-4o", "GPT-4o")
+		-- 			:gsub("gpt%-4", "GPT-4")
+		-- 			:gsub("gpt%-3.5%-turbo", "GPT-3.5")
+		-- 		table.insert(status_parts, short_model)
+		-- 	elseif current_adapter then
+		-- 		-- Show adapter name if model not available
+		-- 		local short_adapter = current_adapter:gsub("anthropic", "Claude"):gsub("openai", "OpenAI")
+		-- 		table.insert(status_parts, short_adapter)
+		-- 	end
+		--
+		-- 	return table.concat(status_parts, " ")
+		-- end
 
 		local colors = {
 			blue = "#65D1FF",
@@ -204,7 +204,8 @@ return {
 				},
 				lualine_x = {
 					{
-						codecompanion_status,
+						"codecompanion",
+						-- codecompanion_status,
 						color = { fg = colors.green },
 					},
 					{
@@ -218,13 +219,13 @@ return {
 		})
 
 		-- Create command to toggle short modes
-		vim.api.nvim_create_user_command('ToggleLualineShortModes', function()
+		vim.api.nvim_create_user_command("ToggleLualineShortModes", function()
 			vim.g.lualine_use_short_modes = not vim.g.lualine_use_short_modes
-			require('lualine').refresh()
-			local status = vim.g.lualine_use_short_modes and 'short (single letter)' or 'full words'
-			vim.notify('Lualine modes set to ' .. status, vim.log.levels.INFO)
+			require("lualine").refresh()
+			local status = vim.g.lualine_use_short_modes and "short (single letter)" or "full words"
+			vim.notify("Lualine modes set to " .. status, vim.log.levels.INFO)
 		end, {
-			desc = 'Toggle between short and full mode names in lualine'
+			desc = "Toggle between short and full mode names in lualine",
 		})
 	end,
 }

@@ -13,7 +13,7 @@ return {
 				end,
 			})
 			-- load the colorscheme here
-			-- vim.cmd([[colorscheme catppuccin]])
+			vim.cmd([[colorscheme catppuccin]])
 		end,
 	},
 	{
@@ -53,7 +53,7 @@ return {
 				end,
 			})
 			-- load the colorscheme here
-			vim.cmd([[colorscheme tokyonight]])
+			-- vim.cmd([[colorscheme tokyonight]])
 			-- Sets colors to line numbers Above, Current and Below  in this order
 			function LineNumberColors()
 				vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#51B3EC", bg = "#495060", bold = true })
