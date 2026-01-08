@@ -11,17 +11,20 @@ return {
 		-- "nvim-lualine/lualine.nvim",
 	},
 	event = "VeryLazy", -- Lazy load the plugin
+	init = function()
+		require("shelbybark.plugins.codecompanion.fidget-spinner"):init()
+	end,
 	config = function()
 		require("codecompanion").setup({
 			ignore_warnings = true,
-			strategies = {
-				chat = {
-					adapter = "anthropic",
-				},
-				inline = {
-					adapter = "anthropic",
-				},
+		strategies = {
+			chat = {
+				adapter = "anthropic_haiku",
 			},
+			inline = {
+				adapter = "anthropic_haiku",
+			},
+		},
 			adapters = {
 				http = {
 					anthropic = function()
@@ -82,15 +85,15 @@ return {
 		-- Optional: Set up keymaps
 		vim.api.nvim_set_keymap(
 			"n",
-		"<leader>cc",
-		"<cmd>CodeCompanionChat anthropic_haiku Toggle<cr>",
-		{ noremap = true, silent = true, desc = "Chat with Claude Haiku" }
+			"<leader>cc",
+			"<cmd>CodeCompanionChat anthropic_haiku Toggle<cr>",
+			{ noremap = true, silent = true, desc = "Chat with Claude Haiku" }
 		)
 		vim.api.nvim_set_keymap(
 			"v",
-		"<leader>cc",
-		"<cmd>CodeCompanionChat anthropic_haiku Toggle<cr>",
-		{ noremap = true, silent = true, desc = "Chat with Claude Haiku" }
+			"<leader>cc",
+			"<cmd>CodeCompanionChat anthropic_haiku Toggle<cr>",
+			{ noremap = true, silent = true, desc = "Chat with Claude Haiku" }
 		)
 		vim.api.nvim_set_keymap("n", "<leader>ca", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
 		vim.api.nvim_set_keymap("v", "<leader>ca", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
