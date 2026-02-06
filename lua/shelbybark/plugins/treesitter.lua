@@ -6,7 +6,10 @@ return {
 		priority = 1000,
 		build = ":TSUpdate",
 		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects",
+			{
+				"nvim-treesitter/nvim-treesitter-textobjects",
+				lazy = false,
+			},
 		},
 		config = function()
 			require("nvim-treesitter.configs").setup({
@@ -72,6 +75,8 @@ return {
 					},
 				},
 			})
+			-- Manually initialize textobjects after treesitter is configured
+			require("nvim-treesitter-textobjects").init()
 		end,
 	},
 	{
@@ -83,3 +88,4 @@ return {
 		},
 	},
 }
+
