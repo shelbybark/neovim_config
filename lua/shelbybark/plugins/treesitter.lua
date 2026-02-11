@@ -12,7 +12,7 @@ return {
 			},
 		},
 		config = function()
-			require("nvim-treesitter.configs").setup({
+			require("nvim-treesitter.config").setup({
 				ensure_installed = {
 					"astro",
 					"bash",
@@ -74,9 +74,7 @@ return {
 						},
 					},
 				},
-			})
-			-- Manually initialize textobjects after treesitter is configured
-			require("nvim-treesitter-textobjects").init()
+		})
 		end,
 	},
 	{
