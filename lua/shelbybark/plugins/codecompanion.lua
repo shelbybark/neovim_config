@@ -15,9 +15,22 @@ return {
 		require("shelbybark.plugins.codecompanion.fidget-spinner"):init()
 	end,
 	config = function()
+		-- Store config in a module-level variable for later access
+		local codecompanion_config = {
+			strategies = {
+				chat = {
+					adapter = "anthropic_haiku",
+				},
+				inline = {
+					adapter = "anthropic_haiku",
+				},
+			},
+		}
+		_G.codecompanion_config = codecompanion_config
+
 		require("codecompanion").setup({
 			ignore_warnings = true,
-		strategies = {
+			strategies = {
 			chat = {
 				adapter = "anthropic_haiku",
 			},
@@ -107,14 +120,7 @@ return {
 
 		-- Create commands to show and change current model
 		vim.api.nvim_create_user_command("CodeCompanionModel", function()
-			local ok, codecompanion = pcall(require, "codecompanion")
-			if not ok then
-				vim.notify("CodeCompanion not available", vim.log.levels.ERROR)
-				return
-			end
-
-			-- Get current adapter info
-			local current_adapter = codecompanion.config.strategies.chat.adapter
+			local current_adapter = _G.codecompanion_config.strategies.chat.adapter
 			local model_info = "Unknown"
 
 			if current_adapter == "anthropic" then
@@ -150,8 +156,8 @@ return {
 			end
 
 			-- Update the config
-			require("codecompanion").config.strategies.chat.adapter = adapter
-			require("codecompanion").config.strategies.inline.adapter = adapter
+			_G.codecompanion_config.strategies.chat.adapter = adapter
+			_G.codecompanion_config.strategies.inline.adapter = adapter
 
 			vim.notify(string.format("Switched to %s model", model), vim.log.levels.INFO)
 
