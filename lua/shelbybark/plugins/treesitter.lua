@@ -54,17 +54,6 @@ return {
 				end,
 			})
 
-			-- Enable treesitter-based indentation for supported filetypes
-			vim.api.nvim_create_autocmd("FileType", {
-				callback = function()
-					local ok = pcall(function()
-						vim.opt_local.indentexpr = "v:lua.vim.treesitter.indentexpr()"
-					end)
-					if not ok then
-						-- Parser not available for this filetype
-					end
-				end,
-			})
 		end,
 	},
 	{
