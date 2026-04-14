@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/shelbybark/.local/share/nvim/lazy/nvim-treesitter/**)",
+      "Read(//Users/shelbybark/.local/share/nvim/**)",
+      "Bash(nvim --headless -c \"lua print\\(vim.fn.stdpath\\('data'\\)\\)\" -c \"q\")",
+      "Bash(nvim --headless -c \"lua print\\(vim.api.nvim_get_runtime_file\\('parser', true\\)[1] or 'none'\\)\" -c \"q\")",
+      "Bash(nvim --headless -c \"lua io.write\\(vim.fn.stdpath\\('data'\\) .. '\\\\n'\\)\" -c \"q\")"
+    ]
+  }
+}
