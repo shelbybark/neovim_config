@@ -49,7 +49,7 @@ opt.swapfile = false
 
 -- auto-reload files changed outside neovim
 opt.autoread = true
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "WinEnter", "CursorHold", "CursorHoldI" }, {
   pattern = "*",
   command = "checktime",
 })
